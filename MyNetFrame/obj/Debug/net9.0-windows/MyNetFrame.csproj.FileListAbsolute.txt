@@ -1,0 +1,14 @@
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.GeneratedMSBuildEditorConfig.editorconfig
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.AssemblyInfoInputs.cache
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.AssemblyInfo.cs
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.csproj.CoreCompileInputs.cache
+d:\code\C#\MyNetFrame\bin\Debug\net9.0-windows\MyNetFrame.exe
+d:\code\C#\MyNetFrame\bin\Debug\net9.0-windows\MyNetFrame.deps.json
+d:\code\C#\MyNetFrame\bin\Debug\net9.0-windows\MyNetFrame.runtimeconfig.json
+d:\code\C#\MyNetFrame\bin\Debug\net9.0-windows\MyNetFrame.dll
+d:\code\C#\MyNetFrame\bin\Debug\net9.0-windows\MyNetFrame.pdb
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.dll
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\refint\MyNetFrame.dll
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.pdb
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\MyNetFrame.genruntimeconfig.cache
+d:\code\C#\MyNetFrame\obj\Debug\net9.0-windows\ref\MyNetFrame.dll

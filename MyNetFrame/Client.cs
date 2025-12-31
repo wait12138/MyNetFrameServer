@@ -268,16 +268,35 @@ public class Client
                     ObjectInfoMsg objectInfoMsg = new ObjectInfoMsg();
                     objectInfoMsg.Reading(bytes, nowIndex);
 
-                    // 防止将玩家稳定ID误当作物体ID
-                    if (Program.serverSocket.clientDic.Values.Any(c => c.stableID == objectInfoMsg.objectID) ||
-                        Program.serverSocket.historyClientDic.ContainsKey(objectInfoMsg.objectID))
+                    // 更严格地防止异常/误判的物体更新（如将IP片段误当作objectID）
+                    bool idLooksLikeIpFragment = objectInfoMsg.objectID.Contains('.');
+                    bool idIsKnownPlayer = Program.serverSocket.clientDic.Values.Any(c => c.stableID == objectInfoMsg.objectID)
+                                          || Program.serverSocket.historyClientDic.ContainsKey(objectInfoMsg.objectID)
+                                          || Program.serverSocket.clientDic.Values.Any(c => c.stableID.StartsWith(objectInfoMsg.objectID));
+
+                    bool valueIsValid(float v)
                     {
-                        Console.WriteLine("忽略疑似玩家ID的物体更新包:" + objectInfoMsg.objectID);
+                        // 过滤NaN/Infinity以及明显不合理的巨大数值（位置/旋转）
+                        return !float.IsNaN(v) && !float.IsInfinity(v) && MathF.Abs(v) < 1_000_000f;
+                    }
+
+                    bool payloadValid =
+                        !string.IsNullOrWhiteSpace(objectInfoMsg.objectID) &&
+                        !idLooksLikeIpFragment &&
+                        !idIsKnownPlayer &&
+                        valueIsValid(objectInfoMsg.posX) && valueIsValid(objectInfoMsg.posY) && valueIsValid(objectInfoMsg.posZ) &&
+                        valueIsValid(objectInfoMsg.rotX) && valueIsValid(objectInfoMsg.rotY) && valueIsValid(objectInfoMsg.rotZ);
+
+                    if (!payloadValid)
+                    {
+                        Console.WriteLine("丢弃异常物体更新: ID=" + objectInfoMsg.objectID +
+                                          " pos=(" + objectInfoMsg.posX + "," + objectInfoMsg.posY + "," + objectInfoMsg.posZ + ")" +
+                                          " rot=(" + objectInfoMsg.rotX + "," + objectInfoMsg.rotY + "," + objectInfoMsg.rotZ + ")");
                         break;
                     }
 
                     Program.serverSocket.BroadcastExceptSender(objectInfoMsg, this.stableID);
-                    // 未来会增加物体状态的服务器存储功能
+                    // 存储合法的物体状态，供快照与重连恢复
                     ObjectInfo objectInfo = new ObjectInfo()
                     {
                         objectID = objectInfoMsg.objectID,

@@ -14,7 +14,7 @@ public class ServerSocket
     // 将场景上物体信息存入字典 以便重连时恢复数据
     public Dictionary<string, ObjectInfo> objectInfoDic = new Dictionary<string, ObjectInfo>();
     private readonly string snapshotFilePath = Path.Combine(AppContext.BaseDirectory, "server_snapshot.json");
-    private Timer snapshotTimer;
+    private System.Threading.Timer snapshotTimer;
     public void Start(string ip, int port)
     {
         IPEndPoint ipPoint = new IPEndPoint(IPAddress.Parse(ip), port);
@@ -32,7 +32,7 @@ public class ServerSocket
             ThreadPool.QueueUserWorkItem(ShowClientInfo);
 
             // 周期性快照（每10秒）
-            snapshotTimer = new Timer(_ => SaveSnapshot(), null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+            snapshotTimer = new System.Threading.Timer(_ => SaveSnapshot(), null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
         }
         catch (Exception ex)
         {
